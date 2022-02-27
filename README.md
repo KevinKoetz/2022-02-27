@@ -6,7 +6,36 @@ https://www.typescriptlang.org/docs/handbook/intro.html
 - a transpiled language (typescript is not executed directly, it is first transpiled/translated into javascript)
 - a language that adds static typing to javascript (the types of variables have to be known before executing the code - at compile time - and should not change during the runtime)
 
+## Why use Typescript?
+The following code is syntactically valid javascript and nothing prevents you from running this code.
+```javascript
+const message = "Hello World"
+console.log(message.toLowercase())
+```
+However, you will get an error that `TypeError: message.toLowercase is not a function`. We made a typo and our application crashes while running. Imagine that this part of the code is deeply nested in some function and only get's called under very specific circumstances, so you haven't noticed it during development. 
+With typescript you get this error right when transpiling:
+```
+Property 'toLowercase' does not exist on type '"Hello World"'. Did you mean 'toLowerCase'?ts(2551)
+```
 
+Another example:
+```javascript
+const fancyDiv = document.getElementById("fancyDiv")
+fancyDiv.style.background = "red"
+```
+And suddenly while your program is running fine for some users it crashes for others with: `TypeError: Cannot read properties of null (reading 'style')`. Well, it seems you didn't get the memo that Jim made a change that removes this fancyDiv for users that have an Avatar uploaded.
+
+In typescript you get right away, before shipping your code:
+```
+Object is possibly 'null'.ts(2531)
+```
+How to fix that?
+``` typescript
+const fancyDiv = document.getElementById("fancyDiv");
+if (fancyDiv) fancyDiv.style.background = "red";
+```
+
+While you will write a little bit more code when using typescript, it will be certainly much more bulletproof!
 # 2. Initialize Project
 ## initialize npm
 ```bash
@@ -94,37 +123,6 @@ nodemon ./src/index.ts
 ts-node is a wrapper around node that allows you to run .ts file directly. Not suggested for production environments as the transpilation takes some time, but very convenient for development. Nodemon uses ts-node to run .ts files.
 
 # 3. Typescript - The Basics
-## Why use Typescript?
-The following code is syntactically valid javascript and nothing prevents you from running this code.
-```javascript
-const message = "Hello World"
-console.log(message.toLowercase())
-```
-However, you will get an error that `TypeError: message.toLowercase is not a function`. We made a typo and our application crashes while running. Imagine that this part of the code is deeply nested in some function and only get's called under very specific circumstances, so you haven't noticed it during development. 
-With typescript you get this error right when transpiling:
-```
-Property 'toLowercase' does not exist on type '"Hello World"'. Did you mean 'toLowerCase'?ts(2551)
-```
-
-Another example:
-```javascript
-const fancyDiv = document.getElementById("fancyDiv")
-fancyDiv.style.background = "red"
-```
-And suddenly while your program is running fine for some users it crashes for others with: `TypeError: Cannot read properties of null (reading 'style')`. Well, it seems you didn't get the memo that Jim made a change that removes this fancyDiv for users that have an Avatar uploaded.
-
-In typescript you get right away, before shipping your code:
-```
-Object is possibly 'null'.ts(2531)
-```
-How to fix that?
-``` typescript
-const fancyDiv = document.getElementById("fancyDiv");
-if (fancyDiv) fancyDiv.style.background = "red";
-```
-
-While you will write a little bit more code when using typescript, it will be certainly much more bulletproof!
-
 ## What are types?
 From javascript you already know those types:
 ```javascript
