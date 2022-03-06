@@ -1,8 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Card from "./Component";
 
-function Component(props: {id: string, }) {
+interface ComponentProps {
+  id: string;
+  onDelete: (id: string) => void;
+}
+
+function Component({ id, onDelete }: ComponentProps) {
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +25,12 @@ function Component(props: {id: string, }) {
         >
           Learn React
         </a>
+        <Card
+          id="1"
+          content="Hello Card Content"
+          title="Title"
+          onDelete={() => {}}
+        />
       </header>
     </div>
   );

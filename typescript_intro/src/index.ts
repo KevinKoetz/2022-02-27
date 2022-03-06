@@ -128,6 +128,15 @@ let extendableArray: number[] = [1];
 extendableArray = [1, 3, 5, 8, 9, 7, 4];
 extendableArray.push(2);
 
+let unionArray2: (
+  | { name: string; password: string }
+  | { username: string; password: string }
+)[] = [
+  { name: "kevin", password: "1234" },
+  { username: "esra", password: "1234" },
+  { name: "", password: "1234" },
+];
+
 //extendableArray.push("5")
 /* Error:
 Argument of type 'string' is not assignable to parameter of type 'number'.ts(2345)
@@ -180,7 +189,7 @@ Type 'string' is not assignable to type 'number'.ts(2322)
 */
 
 //never type
-let diceRoll2: 1 | 2 | 3 | 4 | 5 | 6 = 2 as any;
+let diceRoll2: 1 | 2 | 3 | 4 | 5 | 6 | 7 = 2 as any;
 
 switch (diceRoll2) {
   case 1:
@@ -214,6 +223,8 @@ switch (diceRoll2) {
     break;
   case 6:
     break;
+  case 7:
+    break;
   default:
     const _never: never = diceRoll2;
     /** Error (because we missed a case above):
@@ -221,3 +232,128 @@ switch (diceRoll2) {
      */
     console.log("Unhandled Case:", _never);
 }
+
+type Roles = "root" | "admin" | "customer";
+interface IUser {
+  name: string;
+  password: string | number;
+  role: Roles;
+}
+type UserArray = IUser[];
+
+declare function stringify (para: number): string //declaring stringify without implemting it. For example if it come from Node, the Browser etc.
+
+
+const user4: IUser = { password: "1234", name: "Tanya", role: "root" };
+const user5: IUser = { name: "Tanya", password: "1234", role: "admin" };
+const user6: IUser = { name: "Tanya", password: "1234", role: "customer" };
+const user7: IUser = { name: "Tanya", password: "1234", role: "customer" };
+
+const userArray: IUser[] = [];
+userArray.push(user4, user5, user6);
+
+interface Admin extends IUser {
+  permissions: "destroy";
+}
+
+interface Products {
+  id: string;
+  price: number;
+  description: string;
+}
+
+type UserProducts = Products & IUser;
+
+/* const something: UserProducts = {} */
+
+interface SpecialRequest extends Request {
+  head: string;
+}
+
+//const something: User = {} //{} is missing name, password, role
+//If you still want to do it you can cast it:
+const something: IUser = { password: "adwa", role: "admin" } as IUser; //casting: expression as type
+
+interface bird {
+  name: "bird";
+  fly: () => void;
+}
+interface fish {
+  name: "fish";
+  swim: () => void;
+}
+
+interface cat {
+  name: "cat";
+  sleep: () => void;
+}
+
+const animal: bird | fish | cat | number = (
+  Math.random() < 0.5
+    ? { name: "cat", sleep: () => {} }
+    : Math.random() < 0.5
+    ? { name: "fish", swim: () => {} }
+    : {
+        name: "bird",
+        fly: () => {},
+      }
+) as any;
+
+if (typeof animal !== "number") {
+  if ("fly" in animal) animal.name;
+  if ("sleep" in animal) animal.name;
+  if ("swim" in animal) animal.name;
+
+  if (animal.name === "cat") animal.sleep();
+}
+
+if(typeof animal === "number") animal.toFixed()
+
+class Customer implements IUser{
+  constructor(name: string, password: string) {
+    this.name = name;
+    this.password = password
+    this.role = "customer"
+    this.cart = []
+  }
+  name: string;
+  password: string | number;
+  role: Roles;
+  cart: string[]
+}
+
+let anotherVar: Customer | cat | "Client" = new Customer("Kevin", "1234") as any
+
+if(anotherVar === "Client") throw new Error("")
+
+const test = anotherVar
+
+if(typeof anotherVar !== "string"){
+  if("sleep" in anotherVar)anotherVar.sleep()
+  if(anotherVar instanceof Customer) anotherVar.name;
+}else {
+  console.log(anotherVar);
+}
+
+
+function isUser(variable: unknown): variable is IUser {
+  if(!variable) return false;
+  if(typeof variable !== "object") return false;
+  if(!("name" in variable)) return false;
+  if(!("role" in variable)) return false;
+  if(!("password" in variable)) return false;
+
+  const c1 = variable as {name: unknown, role: unknown, password: unknown}
+  if(typeof c1.name !== "string" ) return false;
+  if(c1.role !== "root" && c1.role !== "admin"  && c1.role !== "customer" ) return false;
+  if(typeof c1.password !== "string" && typeof c1.password !== "number") return false;
+
+  return true
+}
+
+const anyVar: unknown = {name: "Kevin", password: "1234", role: "root"}
+
+if(isUser(anyVar)){
+  anyVar.name;
+}
+

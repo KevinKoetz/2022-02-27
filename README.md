@@ -425,7 +425,13 @@ let union3: IUser = {name: "Kevin", password: "1234", age: 5} //works because ag
 
 # 5. Narrowing and casting
 More on this here: https://www.typescriptlang.org/docs/handbook/2/narrowing.html
-As a very short summary, typescript allows you to narrow down a type by 
+As a very short summary, typescript allows you to narrow down a type by:
+- typeof guards:
+- the in operator:
+- instanceof narrowing:
+- assignments:
+- control flow analysis:
+- using type predicates
 # 6. create-react-app with typescript
 ```bash
 #Run in ./
